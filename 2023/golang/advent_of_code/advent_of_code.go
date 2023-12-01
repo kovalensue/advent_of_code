@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"puzzels"
+	"regexp"
 )
 
 func main() {
@@ -10,4 +11,9 @@ func main() {
 	fmt.Println("===================================================================")
 	fmt.Println("Puzzle #1:", puzzels.Puzzle1())
 	fmt.Println("Puzzle #1:", puzzels.Puzzle1a())
+
+	// positive lookahead tests
+	re := regexp.MustCompile("(?=(seven|nine))")
+	numbers := re.FindAllString("sevenine", -1)
+	fmt.Println(numbers)
 }
