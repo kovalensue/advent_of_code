@@ -1,0 +1,6 @@
+go 1.21.4
+
+use (
+	./advent_of_code
+	./puzzels
+)
