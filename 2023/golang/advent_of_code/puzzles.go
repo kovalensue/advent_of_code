@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -102,12 +103,18 @@ func Puzzle1a(inputFile string) int {
 	return Sum(result)
 }
 
-func Puzzle2(inputFile string) int {
+func Puzzle2(inputFile string) (int, int) {
 
-	CubesCount := map[string]int{
+	maxAllowedCount := map[string]int{
 		"red":   12,
 		"green": 13,
 		"blue":  14,
+	}
+
+	type Hand struct {
+		red   int
+		green int
+		blue  int
 	}
 
 	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
@@ -117,6 +124,7 @@ func Puzzle2(inputFile string) int {
 	fileScanner.Split(bufio.ScanLines)
 
 	var validGames []int
+	var powers []int
 
 	for fileScanner.Scan() {
 		line := fileScanner.Text()
@@ -127,6 +135,10 @@ func Puzzle2(inputFile string) int {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		var redCounts []int
+		var greenCounts []int
+		var blueCounts []int
 
 		for _, hand := range strings.Split(splitedLine[1], ";") {
 			//fmt.Println(hand)
@@ -142,21 +154,33 @@ func Puzzle2(inputFile string) int {
 					log.Fatal(err)
 				}
 
-				if cubeNumInt > CubesCount[cubeColor] {
+				if cubeColor == "red" {
+					redCounts = append(redCounts, cubeNumInt)
+				} else if cubeColor == "green" {
+					greenCounts = append(greenCounts, cubeNumInt)
+				} else {
+					blueCounts = append(blueCounts, cubeNumInt)
+				}
+
+				if cubeNumInt > maxAllowedCount[cubeColor] {
 					gameIsPossible = false
-					break
 				}
 				//fmt.Println(cubeNumInt, CubesCount[cubeColor])
-			}
-
-			if !gameIsPossible {
-				break
 			}
 		}
 
 		if gameIsPossible {
 			validGames = append(validGames, gameId)
 		}
+
+		maxRed := slices.Max(redCounts)
+		maxGreen := slices.Max(greenCounts)
+		maxBlue := slices.Max(blueCounts)
+
+		powerOfMaxes := maxRed * maxGreen * maxBlue
+		powers = append(powers, powerOfMaxes)
+
 	}
-	return Sum(validGames)
+
+	return Sum(validGames), Sum(powers)
 }
