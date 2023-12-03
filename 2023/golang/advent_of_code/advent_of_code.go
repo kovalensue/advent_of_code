@@ -12,4 +12,5 @@ func main() {
 	fmt.Println("Puzzle #1:", Puzzle1("puzzle_1.txt"))
 	fmt.Println("Puzzle #1a:", Puzzle1a("puzzle_1.txt"))
 	fmt.Println("Puzzle #2:", validGamesSum, "Puzzle #2a:", powersSum)
+	fmt.Println("Puzzle #3:", Puzzle3("puzzle_3.txt"))
 }

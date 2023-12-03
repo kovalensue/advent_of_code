@@ -184,3 +184,56 @@ func Puzzle2(inputFile string) (int, int) {
 
 	return Sum(validGames), Sum(powers)
 }
+
+func Puzzle3(inputFile string) int {
+
+	var rows []string
+	var numbers []int
+
+	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
+	fileScanner := bufio.NewScanner(file)
+	fileScanner.Split(bufio.ScanLines)
+	for fileScanner.Scan() {
+		rows = append(rows, fileScanner.Text())
+	}
+
+	for i, row := range rows {
+		re := regexp.MustCompile("[0-9]+")
+		locArray := re.FindAllStringIndex(row, -1)
+
+		//fmt.Println(rows[i])
+
+		for _, loc := range locArray {
+			re = regexp.MustCompile("[^.0-9]+")
+
+			start := loc[0] - 1
+			end := loc[1] + 1
+			if start < 0 {
+				start = 0
+			}
+			if end > len(row) {
+				end = len(row)
+			}
+
+			//fmt.Println("start:", start, "end:", end, row, loc, row[start:end])
+
+			var isMatch []bool
+			isMatch = append(isMatch, re.MatchString(row[start:end]))
+
+			if i > 0 {
+				isMatch = append(isMatch, re.MatchString(rows[i-1][start:end]))
+			}
+			if i < len(rows)-1 {
+				isMatch = append(isMatch, re.MatchString(rows[i+1][start:end]))
+			}
+
+			if slices.Contains(isMatch, true) {
+				//fmt.Println(row[loc[0]:loc[1]], isMatch)
+				number, _ := strconv.Atoi(row[loc[0]:loc[1]])
+				numbers = append(numbers, number)
+			}
+		}
+	}
+	//fmt.Println(Sum(numbers))
+	return Sum(numbers)
+}
