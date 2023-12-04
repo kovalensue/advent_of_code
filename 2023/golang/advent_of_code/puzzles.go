@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math"
 	"regexp"
 	"slices"
 	"strconv"
@@ -58,6 +59,16 @@ func Puzzle1a(inputFile string) int {
 		"seven": "7",
 		"eight": "8",
 		"nine":  "9",
+		"0":     "0",
+		"1":     "1",
+		"2":     "2",
+		"3":     "3",
+		"4":     "4",
+		"5":     "5",
+		"6":     "6",
+		"7":     "7",
+		"8":     "8",
+		"9":     "9",
 	}
 
 	// loop through scanner and print each token
@@ -79,21 +90,10 @@ func Puzzle1a(inputFile string) int {
 			loc = re.FindStringIndex(line)
 		}
 
-		firstDigit, ok := digitMap[numbers[0]]
-		if !ok {
-			firstDigit = numbers[0]
-		}
-		secondDigit, ok := digitMap[numbers[len(numbers)-1]]
-		if !ok {
-			secondDigit = numbers[len(numbers)-1]
-		}
-
-		extractedNumber, err := strconv.Atoi(firstDigit + secondDigit)
-		//fmt.Println("extracted number: ", extractedNumber, "string: ", fileScanner.Text())
+		extractedNumber, err := strconv.Atoi((digitMap[numbers[0]] + digitMap[numbers[len(numbers)-1]]))
 		if err != nil {
 			log.Fatal(err, fmt.Sprintf("no number found in - %s", numbers))
 		}
-
 		result = append(result, extractedNumber)
 	}
 
@@ -109,12 +109,6 @@ func Puzzle2(inputFile string) (int, int) {
 		"red":   12,
 		"green": 13,
 		"blue":  14,
-	}
-
-	type Hand struct {
-		red   int
-		green int
-		blue  int
 	}
 
 	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
@@ -236,4 +230,48 @@ func Puzzle3(inputFile string) int {
 	}
 	//fmt.Println(Sum(numbers))
 	return Sum(numbers)
+}
+
+func Puzzle4(inputFile string) int {
+
+	// load input
+	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
+	fileScanner := bufio.NewScanner(file)
+	fileScanner.Split(bufio.ScanLines)
+
+	var points []int
+
+	for fileScanner.Scan() {
+		// parsing file
+		card := strings.Trim(fileScanner.Text(), " ")
+		//cardID := strings.Split(card, ":")[0]
+		numbers := strings.Trim(strings.Split(card, ":")[1], " ")
+		winningNumbers := strings.Split(strings.Trim(strings.Split(numbers, "|")[0], " "), " ")
+		playedNumbers := strings.Split(strings.Trim(strings.Split(numbers, "|")[1], " "), " ")
+
+		// remove empty strings from parsed slices
+		winningNumbers = RemoveEmptyStrings(winningNumbers)
+		playedNumbers = RemoveEmptyStrings(playedNumbers)
+
+		//fmt.Println(cardID+":", "winning:", winningNumbers, "played:", playedNumbers)
+
+		// get number of matches
+		numberOfMatches := 0
+		for _, winningNum := range winningNumbers {
+			if slices.Contains(playedNumbers, winningNum) {
+				numberOfMatches += 1
+			}
+		}
+
+		// calculate points for given card
+		// description of point calculation seems to be on purpose misleading
+		// for example: 1*2*2*2 can be more easily calculated as 2^(n-1)
+		points = append(points, int(math.Floor(math.Pow(2, float64((numberOfMatches-1))))))
+	}
+
+	file.Close()
+
+	// return sum of all points
+	return Sum(points)
+
 }
