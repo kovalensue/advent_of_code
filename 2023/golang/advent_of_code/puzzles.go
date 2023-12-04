@@ -265,7 +265,7 @@ func Puzzle4(inputFile string) int {
 
 		// calculate points for given card
 		// description of point calculation seems to be on purpose misleading
-		// for example: 1*2*2*2 can be more easily calculated as 2^(n-1)
+		// for example: 1*2*2*2 can be more easily calculated as 2^(n-1) with floor rounding
 		points = append(points, int(math.Floor(math.Pow(2, float64((numberOfMatches-1))))))
 	}
 
