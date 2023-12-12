@@ -11,9 +11,11 @@ import (
 	"strings"
 )
 
+const RESOURCES_PATH = "../golang/resources/"
+
 func Puzzle1(inputFile string) int {
 
-	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
+	file := OpenFile(RESOURCES_PATH + inputFile)
 
 	// initialize new Scanner and split file to lines
 	fileScanner := bufio.NewScanner(file)
@@ -42,7 +44,7 @@ func Puzzle1(inputFile string) int {
 
 func Puzzle1a(inputFile string) int {
 
-	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
+	file := OpenFile(RESOURCES_PATH + inputFile)
 
 	// initialize new Scanner and split file to lines
 	fileScanner := bufio.NewScanner(file)
@@ -82,7 +84,8 @@ func Puzzle1a(inputFile string) int {
 			//fmt.Println(loc, line)
 			numbers = append(numbers, line[loc[0]:loc[1]])
 			if loc[1] > 1 {
-				line = line[loc[1]-1:] // if end of match is bigger than one whe go back one more index to cover text number overlaps
+				// if end of match is bigger than one whe go back one more index to cover text number overlaps
+				line = line[loc[1]-1:]
 			} else {
 				line = line[loc[1]:]
 			}
@@ -111,7 +114,7 @@ func Puzzle2(inputFile string) (int, int) {
 		"blue":  14,
 	}
 
-	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
+	file := OpenFile(RESOURCES_PATH + inputFile)
 
 	// initialize new Scanner and split file to lines
 	fileScanner := bufio.NewScanner(file)
@@ -184,7 +187,7 @@ func Puzzle3(inputFile string) int {
 	var rows []string
 	var numbers []int
 
-	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
+	file := OpenFile(RESOURCES_PATH + inputFile)
 	fileScanner := bufio.NewScanner(file)
 	fileScanner.Split(bufio.ScanLines)
 	for fileScanner.Scan() {
@@ -235,7 +238,7 @@ func Puzzle3(inputFile string) int {
 func Puzzle4(inputFile string) int {
 
 	// load input
-	file := OpenFile("/home/kovalikt/git/personal/advent_of_code/2023/golang/resources/" + inputFile)
+	file := OpenFile(RESOURCES_PATH + inputFile)
 	fileScanner := bufio.NewScanner(file)
 	fileScanner.Split(bufio.ScanLines)
 
@@ -273,5 +276,20 @@ func Puzzle4(inputFile string) int {
 
 	// return sum of all points
 	return Sum(points)
+}
 
+func Puzzle5(inputFile string) int {
+
+	file := OpenFile(RESOURCES_PATH + inputFile)
+
+	// initialize new Scanner and split file to lines
+	fileScanner := bufio.NewScanner(file)
+	fileScanner.Split(bufio.ScanLines)
+
+	// process file
+	for fileScanner.Scan() {
+
+	}
+
+	return 0
 }
